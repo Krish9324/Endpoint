@@ -17,7 +17,11 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com'] 
+    ? [
+        'https://your-frontend-domain.vercel.app',
+        'https://your-frontend-domain.netlify.app',
+        'http://localhost:3000'
+      ] 
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true
 }));
