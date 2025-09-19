@@ -29,7 +29,7 @@ const CustomerTransactions = () => {
 
   useEffect(() => {
     fetchCustomerData();
-  }, [customerId]);
+  }, [customerId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchCustomerData = async () => {
     setLoading(true);
