@@ -1,17 +1,42 @@
 const mysql = require('mysql2');
 require('dotenv').config();
 
-// Create connection pool
+// Base configuration
+const DB_HOST = process.env.DB_HOST || 'localhost';
+const DB_USER = process.env.DB_USER || 'root';
+const DB_PASSWORD = process.env.DB_PASSWORD || '';
+const DB_NAME = process.env.DB_NAME || 'Bank';
+
+// Ensure database exists before creating the pool
+const ensureDatabaseExists = async () => {
+  try {
+    const connection = mysql.createConnection({
+      host: DB_HOST,
+      user: DB_USER,
+      password: DB_PASSWORD
+    });
+
+    const promiseConnection = connection.promise();
+    await promiseConnection.execute(
+      `CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
+    );
+    await promiseConnection.end();
+    console.log(`✅ Database ensured: ${DB_NAME}`);
+  } catch (error) {
+    console.error('❌ Failed to ensure database exists:', error.message);
+    throw error;
+  }
+};
+
+// Create connection pool (after DB exists)
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'Bank',
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
-  acquireTimeout: 60000,
-  timeout: 60000
+  queueLimit: 0
 });
 
 // Get promise-based pool
@@ -67,6 +92,7 @@ const initializeDatabase = async () => {
 
 module.exports = {
   pool: promisePool,
+  ensureDatabaseExists,
   testConnection,
   initializeDatabase
 };

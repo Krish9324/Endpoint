@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Import database configuration
-const { testConnection, initializeDatabase } = require('./config/db');
+const { ensureDatabaseExists, testConnection, initializeDatabase } = require('./config/db');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -87,6 +87,9 @@ app.use((error, req, res, next) => {
 const startServer = async () => {
   try {
     console.log('🚀 Starting Banking System API...');
+    
+    // Ensure database exists
+    await ensureDatabaseExists();
     
     // Test database connection
     await testConnection();

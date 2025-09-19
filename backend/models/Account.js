@@ -47,23 +47,27 @@ class Account {
   // Get transaction history for a user
   static async getTransactionHistory(user_id, limit = 50) {
     try {
-      const [rows] = await pool.execute(
-        `SELECT id, transaction_type, amount, balance_after, created_at 
-         FROM Accounts 
-         WHERE user_id = ? 
-         ORDER BY created_at DESC 
-         LIMIT ?`,
-        [user_id, limit]
+      const limitValue = parseInt(limit) || 50;
+      const userIdValue = parseInt(user_id);
+      
+      if (isNaN(userIdValue)) {
+        throw new Error('Invalid user_id provided');
+      }
+
+      // Try using query instead of execute
+      const [rows] = await pool.query(
+        'SELECT id, user_id, transaction_type, amount, balance_after, created_at FROM Accounts WHERE user_id = ? ORDER BY id DESC LIMIT ?',
+        [userIdValue, limitValue]
       );
       
-      return rows.map(row => new Account(
-        row.id,
-        row.user_id,
-        row.transaction_type,
-        parseFloat(row.amount),
-        parseFloat(row.balance_after),
-        row.created_at
-      ));
+      return rows.map(row => ({
+        id: row.id,
+        user_id: row.user_id,
+        transaction_type: row.transaction_type,
+        amount: parseFloat(row.amount),
+        balance_after: parseFloat(row.balance_after),
+        created_at: row.created_at
+      }));
     } catch (error) {
       throw error;
     }
@@ -82,7 +86,7 @@ class Account {
             (SELECT balance_after 
              FROM Accounts a 
              WHERE a.user_id = u.id 
-             ORDER BY a.created_at DESC 
+             ORDER BY a.id DESC 
              LIMIT 1), 0
           ) as current_balance,
           (SELECT COUNT(*) 
@@ -111,7 +115,7 @@ class Account {
   static async getCurrentBalance(user_id) {
     try {
       const [rows] = await pool.execute(
-        'SELECT balance_after FROM Accounts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+        'SELECT balance_after FROM Accounts WHERE user_id = ? ORDER BY id DESC LIMIT 1',
         [user_id]
       );
       
@@ -129,7 +133,7 @@ class Account {
           COUNT(*) as total_transactions,
           SUM(CASE WHEN transaction_type = 'deposit' THEN amount ELSE 0 END) as total_deposits,
           SUM(CASE WHEN transaction_type = 'withdraw' THEN amount ELSE 0 END) as total_withdrawals,
-          (SELECT balance_after FROM Accounts WHERE user_id = ? ORDER BY created_at DESC LIMIT 1) as current_balance
+          (SELECT balance_after FROM Accounts WHERE user_id = ? ORDER BY id DESC LIMIT 1) as current_balance
         FROM Accounts 
         WHERE user_id = ?
       `, [user_id, user_id]);

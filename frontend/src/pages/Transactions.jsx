@@ -99,10 +99,27 @@ const Transactions = () => {
         setTransactionAmount('');
         setShowDepositModal(false);
         setShowWithdrawModal(false);
-        
-        // Refresh data
+
+        // Optimistically update UI with response transaction
+        const tx = response.data?.data?.transaction;
+        if (tx) {
+          setBalance(tx.balance_after);
+          setTransactions(prev => [
+            {
+              id: tx.id,
+              user_id: user?.id,
+              transaction_type: tx.type,
+              amount: tx.amount,
+              balance_after: tx.balance_after,
+              created_at: tx.created_at
+            },
+            ...prev
+          ]);
+        }
+
+        // Also refetch from server to ensure consistency
         await fetchData();
-        
+
         // Clear success message after 3 seconds
         setTimeout(() => setSuccess(''), 3000);
       } else {

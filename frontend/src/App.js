@@ -9,6 +9,7 @@ import Transactions from './pages/Transactions';
 import Accounts from './pages/Accounts';
 import CustomerTransactions from './pages/CustomerTransactions';
 import Home from './pages/Home';
+import Signup from './pages/Signup';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -43,6 +44,7 @@ function App() {
           <Routes>
             {/* Home/Landing Page */}
             <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<Signup />} />
             
             {/* Login Routes */}
             <Route path="/login/customer" element={<LoginCustomer />} />
