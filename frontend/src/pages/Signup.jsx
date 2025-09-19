@@ -8,7 +8,6 @@ import {
   Form,
   Button,
   Alert,
-  InputGroup,
   ProgressBar
 } from 'react-bootstrap';
 import { authAPI } from '../services/api';
