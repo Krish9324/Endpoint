@@ -67,7 +67,7 @@ const LoginCustomer = () => {
             <Card className="login-card">
               <Card.Body>
                 <div className="text-center mb-4">
-                  <i className="fas fa-user fa-3x text-primary mb-3"></i>
+                  <i className="fas fa-user fa-3x text-dark mb-3"></i>
                   <h2>Customer Login</h2>
                   <p className="text-muted">Access your banking account</p>
                 </div>
@@ -135,14 +135,22 @@ const LoginCustomer = () => {
                   <p className="mb-2">
                     <small className="text-muted">
                       Banking staff? 
-                      <Link to="/login/banker" className="ms-1">
+                      <Link to="/login/banker" className="ms-1" style={{color: '#007bff'}}>
                         Login as Banker
+                      </Link>
+                    </small>
+                  </p>
+                  <p className="mb-2">
+                    <small className="text-muted">
+                      Don't have an account? 
+                      <Link to="/signup" className="ms-1" style={{color: '#007bff'}}>
+                        Create Account
                       </Link>
                     </small>
                   </p>
                   <p>
                     <small className="text-muted">
-                      <Link to="/" className="text-decoration-none">
+                      <Link to="/" className="text-decoration-none" style={{color: '#007bff'}}>
                         <i className="fas fa-arrow-left me-1"></i>
                         Back to Home
                       </Link>

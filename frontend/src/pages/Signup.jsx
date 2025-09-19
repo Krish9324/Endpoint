@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Container,
@@ -8,7 +8,8 @@ import {
   Form,
   Button,
   Alert,
-  InputGroup
+  InputGroup,
+  ProgressBar
 } from 'react-bootstrap';
 import { authAPI } from '../services/api';
 
@@ -21,8 +22,27 @@ const Signup = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Calculate password strength
+    let strength = 0;
+    if (password.length >= 6) strength += 25;
+    if (password.length >= 8) strength += 25;
+    if (/[A-Z]/.test(password)) strength += 25;
+    if (/[0-9]/.test(password)) strength += 25;
+    setPasswordStrength(strength);
+  }, [password]);
 
   const validate = () => {
     if (!name.trim()) return 'Name is required';
@@ -64,138 +84,203 @@ const Signup = () => {
     }
   };
 
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength < 25) return 'danger';
+    if (passwordStrength < 50) return 'warning';
+    if (passwordStrength < 75) return 'info';
+    return 'success';
+  };
+
+  const getPasswordStrengthText = () => {
+    if (passwordStrength < 25) return 'Weak';
+    if (passwordStrength < 50) return 'Fair';
+    if (passwordStrength < 75) return 'Good';
+    return 'Strong';
+  };
+
   return (
-    <div className="login-container">
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={10} lg={8} xl={7}>
-            <Card className="login-card border-0 shadow">
-              <Card.Body className="p-4 p-md-5">
-                <div className="text-center mb-4">
-                  <h1 className="mb-2">
-                    <i className="fas fa-university me-2"></i>
-                    Create Your Account
-                  </h1>
-                  <p className="text-muted mb-0">Join our secure and modern banking platform</p>
+    <div className="signup-page">
+      {/* Animated Background */}
+      <div className="animated-bg">
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+        </div>
+      </div>
+
+      <Container fluid className="px-4 position-relative">
+        <Row className="justify-content-center min-vh-100 align-items-center">
+          <Col lg={10} xl={8}>
+            <Card className={`signup-card ${isLoaded ? 'animate-in' : ''}`}>
+              <Card.Body className="p-5">
+                {/* Header Section */}
+                <div className="text-center mb-5">
+                  <div className="signup-icon mb-4">
+                    <i className="fas fa-user-plus"></i>
+                  </div>
+                  <h1 className="signup-title mb-3">Create Your Account</h1>
+                  <p className="signup-subtitle">Join our secure and modern banking platform</p>
                 </div>
 
                 {error && (
-                  <Alert variant="danger" onClose={() => setError('')} dismissible>
+                  <Alert variant="danger" onClose={() => setError('')} dismissible className="mb-4">
+                    <i className="fas fa-exclamation-triangle me-2"></i>
                     {error}
                   </Alert>
                 )}
                 {success && (
-                  <Alert variant="success" onClose={() => setSuccess('')} dismissible>
+                  <Alert variant="success" onClose={() => setSuccess('')} dismissible className="mb-4">
+                    <i className="fas fa-check-circle me-2"></i>
                     {success}
                   </Alert>
                 )}
 
                 <Form onSubmit={handleSubmit}>
-                  <Row className="g-3">
-                    <Col md={12}>
-                      <Form.Label>Registering as</Form.Label>
-                      <div className="d-flex gap-2">
-                        <Button
-                          type="button"
-                          variant={role === 'customer' ? 'primary' : 'outline-primary'}
-                          onClick={() => setRole('customer')}
-                        >
-                          <i className="fas fa-user me-2"></i>
-                          Customer
-                        </Button>
-                        <Button
-                          type="button"
-                          variant={role === 'banker' ? 'success' : 'outline-success'}
-                          onClick={() => setRole('banker')}
-                        >
-                          <i className="fas fa-briefcase me-2"></i>
-                          Banker
-                        </Button>
-                      </div>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Full Name</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text>
-                            <i className="fas fa-user"></i>
-                          </InputGroup.Text>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter your full name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            disabled={submitting}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Email Address</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text>
-                            <i className="fas fa-envelope"></i>
-                          </InputGroup.Text>
-                          <Form.Control
-                            type="email"
-                            placeholder="you@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            disabled={submitting}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text>
-                            <i className="fas fa-lock"></i>
-                          </InputGroup.Text>
-                          <Form.Control
-                            type="password"
-                            placeholder="Minimum 6 characters"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={submitting}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label>Confirm Password</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text>
-                            <i className="fas fa-check"></i>
-                          </InputGroup.Text>
-                          <Form.Control
-                            type="password"
-                            placeholder="Re-enter password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            disabled={submitting}
-                          />
-                        </InputGroup>
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={12} className="pt-2">
+                  {/* Role Selection */}
+                  <div className="role-selection mb-5">
+                    <h5 className="form-section-title mb-3">Choose Your Role</h5>
+                    <div className="role-buttons">
                       <Button
-                        className="btn-banking w-100"
+                        type="button"
+                        className={`role-btn ${role === 'customer' ? 'active' : ''}`}
+                        onClick={() => setRole('customer')}
+                      >
+                        <div className="role-icon">
+                          <i className="fas fa-user"></i>
+                        </div>
+                        <div className="role-content">
+                          <h6>Customer</h6>
+                          <small>Personal banking services</small>
+                        </div>
+                      </Button>
+                      <Button
+                        type="button"
+                        className={`role-btn ${role === 'banker' ? 'active' : ''}`}
+                        onClick={() => setRole('banker')}
+                      >
+                        <div className="role-icon">
+                          <i className="fas fa-briefcase"></i>
+                        </div>
+                        <div className="role-content">
+                          <h6>Banker</h6>
+                          <small>Banking administration</small>
+                        </div>
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Row className="g-4">
+
+                    <Col md={6}>
+                      <Form.Group className="form-group-modern">
+                        <Form.Label className="form-label-modern">
+                          <i className="fas fa-user me-2"></i>
+                          Full Name
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter your full name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          disabled={submitting}
+                          className="form-control-modern"
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group className="form-group-modern">
+                        <Form.Label className="form-label-modern">
+                          <i className="fas fa-envelope me-2"></i>
+                          Email Address
+                        </Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="you@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          disabled={submitting}
+                          className="form-control-modern"
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group className="form-group-modern">
+                        <Form.Label className="form-label-modern">
+                          <i className="fas fa-lock me-2"></i>
+                          Password
+                        </Form.Label>
+                        <Form.Control
+                          type="password"
+                          placeholder="Create a strong password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          disabled={submitting}
+                          className="form-control-modern"
+                        />
+                        {password && (
+                          <div className="password-strength mt-2">
+                            <div className="d-flex justify-content-between align-items-center mb-1">
+                              <small className="text-muted">Password Strength</small>
+                              <small className={`text-${getPasswordStrengthColor()}`}>
+                                {getPasswordStrengthText()}
+                              </small>
+                            </div>
+                            <ProgressBar
+                              now={passwordStrength}
+                              variant={getPasswordStrengthColor()}
+                              className="password-progress"
+                            />
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group className="form-group-modern">
+                        <Form.Label className="form-label-modern">
+                          <i className="fas fa-check me-2"></i>
+                          Confirm Password
+                        </Form.Label>
+                        <Form.Control
+                          type="password"
+                          placeholder="Re-enter your password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          disabled={submitting}
+                          className="form-control-modern"
+                        />
+                        {confirmPassword && password && (
+                          <div className="mt-2">
+                            {confirmPassword === password ? (
+                              <small className="text-success">
+                                <i className="fas fa-check-circle me-1"></i>
+                                Passwords match
+                              </small>
+                            ) : (
+                              <small className="text-danger">
+                                <i className="fas fa-times-circle me-1"></i>
+                                Passwords don't match
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={12} className="pt-3">
+                      <Button
+                        className="signup-submit-btn w-100"
                         type="submit"
                         disabled={submitting}
+                        size="lg"
                       >
                         {submitting ? (
                           <>
                             <i className="fas fa-spinner fa-spin me-2"></i>
-                            Creating account...
+                            Creating your account...
                           </>
                         ) : (
                           <>
@@ -208,15 +293,26 @@ const Signup = () => {
                   </Row>
                 </Form>
 
-                <div className="mt-4 text-center">
-                  <small className="text-muted">
-                    Already have an account?{' '}
-                    {role === 'banker' ? (
-                      <Link to="/login/banker">Log in as Banker</Link>
-                    ) : (
-                      <Link to="/login/customer">Log in as Customer</Link>
-                    )}
-                  </small>
+                {/* Footer Links */}
+                <div className="signup-footer mt-5 pt-4 border-top">
+                  <div className="row g-3">
+                    <div className="col-md-6 text-center text-md-start">
+                      <small className="text-muted">
+                        Already have an account?{' '}
+                        {role === 'banker' ? (
+                          <Link to="/login/banker" className="signup-link">Log in as Banker</Link>
+                        ) : (
+                          <Link to="/login/customer" className="signup-link">Log in as Customer</Link>
+                        )}
+                      </small>
+                    </div>
+                    <div className="col-md-6 text-center text-md-end">
+                      <Link to="/" className="signup-back-link">
+                        <i className="fas fa-arrow-left me-1"></i>
+                        Back to Home
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </Card.Body>
             </Card>

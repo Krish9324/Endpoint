@@ -1,34 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 const Home = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="home-page" style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '2rem 0'
-    }}>
-      <Container fluid className="px-4">
+    <div className="home-page">
+      {/* Animated Background */}
+      <div className="animated-bg">
+        <div className="floating-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+          <div className="shape shape-4"></div>
+          <div className="shape shape-5"></div>
+        </div>
+      </div>
+
+      <Container fluid className="px-4 position-relative">
         {/* Hero Section */}
         <Row className="justify-content-center mb-5">
           <Col lg={10} xl={8}>
-            <div className="text-center text-white mb-5">
-              <h1 className="display-4 fw-bold mb-3" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
-                <i className="fas fa-university me-3"></i>
+            <div className={`text-center text-dark mb-5 hero-content ${isLoaded ? 'animate-in' : ''}`}>
+              <div className="hero-icon mb-4">
+                <i className="fas fa-university"></i>
+              </div>
+              <h1 className="display-3 fw-bold mb-4 hero-title">
                 Modern Banking System
               </h1>
-              <p className="lead mb-4" style={{ fontSize: '1.25rem', opacity: 0.9 }}>
+              <p className="lead mb-4 hero-subtitle">
                 Experience secure, reliable, and innovative banking services designed for the digital age
               </p>
-              <div className="d-flex justify-content-center gap-4 mb-4">
-                <div className="d-flex align-items-center">
-                  <i className="fas fa-shield-alt me-2"></i>
+              <div className="hero-features">
+                <div className="feature-item">
+                  <i className="fas fa-shield-alt"></i>
                   <span>Bank-level Security</span>
                 </div>
-                <div className="d-flex align-items-center">
-                  <i className="fas fa-clock me-2"></i>
+                <div className="feature-item">
+                  <i className="fas fa-clock"></i>
                   <span>24/7 Access</span>
+                </div>
+                <div className="feature-item">
+                  <i className="fas fa-mobile-alt"></i>
+                  <span>Mobile Ready</span>
                 </div>
               </div>
             </div>
@@ -38,83 +61,74 @@ const Home = () => {
         {/* Main Content */}
         <Row className="justify-content-center">
           <Col lg={12} xl={10}>
-            <Card className="border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
-              <Card.Body className="p-4">
-                {/* Signup CTA */}
-                <Row className="mb-4">
+            <Card className={`main-card ${isLoaded ? 'animate-in' : ''}`}>
+              <Card.Body className="p-5">
+                {/* Welcome Section */}
+                <Row className="mb-5">
                   <Col xs={12}>
-                    <div className="text-center">
-                      <h3 className="mb-3 text-primary">Get Started Today</h3>
-                      <p className="text-muted mb-3">Join thousands of satisfied customers and bankers</p>
-                      <Link 
-                        to="/signup" 
-                        className="btn btn-primary btn-lg px-4 py-2" 
-                        style={{
-                          borderRadius: '50px',
-                          fontSize: '1rem',
-                          fontWeight: '600',
-                          boxShadow: '0 4px 15px rgba(0,123,255,0.3)',
-                          transition: 'all 0.3s ease'
-                        }}
-                      >
-                        <i className="fas fa-user-plus me-2"></i>
-                        Create Your Account
-                      </Link>
+                    <div className="text-center welcome-section">
+                      <h2 className="mb-3 text-dark fw-bold">Welcome to the Future of Banking</h2>
+                      <p className="text-muted mb-4 fs-5">
+                        Join thousands of satisfied customers and bankers who trust our platform
+                      </p>
+                      <div className="stats-row">
+                        <div className="stat-item">
+                          <div className="stat-number">10K+</div>
+                          <div className="stat-label">Active Users</div>
+                        </div>
+                        <div className="stat-item">
+                          <div className="stat-number">$50M+</div>
+                          <div className="stat-label">Transactions</div>
+                        </div>
+                        <div className="stat-item">
+                          <div className="stat-number">99.9%</div>
+                          <div className="stat-label">Uptime</div>
+                        </div>
+                      </div>
                     </div>
                   </Col>
                 </Row>
 
                 {/* Divider */}
-                <div className="text-center mb-4">
-                  <div className="d-flex align-items-center">
-                    <hr className="flex-grow-1" />
-                    <span className="px-3 text-muted">or</span>
-                    <hr className="flex-grow-1" />
+                <div className="text-center mb-5">
+                  <div className="divider-line">
+                    <span className="divider-text">Choose Your Portal</span>
                   </div>
                 </div>
 
                 {/* Login Options */}
-                <Row className="g-3 justify-content-center">
+                <Row className="g-4 justify-content-center">
                   <Col lg={5} xl={4}>
-                    <Card className="h-100 border-0 shadow-sm" style={{ borderRadius: '15px' }}>
-                      <Card.Body className="p-3 text-center">
-                        <div className="mb-3">
-                          <div 
-                            className="mx-auto d-flex align-items-center justify-content-center"
-                            style={{
-                              width: '70px',
-                              height: '70px',
-                              borderRadius: '50%',
-                              background: 'linear-gradient(45deg, #007bff, #0056b3)',
-                              color: 'white',
-                              fontSize: '1.8rem'
-                            }}
-                          >
-                            <i className="fas fa-user"></i>
-                          </div>
+                    <Card className="portal-card customer-card h-100">
+                      <Card.Body className="p-4 text-center">
+                        <div className="portal-icon customer-icon">
+                          <i className="fas fa-user"></i>
                         </div>
-                        <h5 className="mb-2 text-primary">Customer Portal</h5>
-                        <p className="text-muted mb-3 small" style={{ lineHeight: '1.5' }}>
-                          Access your account, view transactions, and manage your finances
+                        <h4 className="mb-3 text-dark fw-bold">Customer Portal</h4>
+                        <p className="text-muted mb-4">
+                          Access your account, view transactions, and manage your finances with ease
                         </p>
-                        <div className="mb-3">
-                          <small className="text-muted d-block mb-1">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Real-time balance updates
-                          </small>
-                          <small className="text-muted d-block mb-1">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Transaction history
-                          </small>
-                          <small className="text-muted d-block">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Secure transfers
-                          </small>
+                        <div className="features-list mb-4">
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Real-time balance updates</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Complete transaction history</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Secure money transfers</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Mobile-friendly interface</span>
+                          </div>
                         </div>
                         <Link 
                           to="/login/customer" 
-                          className="btn btn-primary w-100 py-2"
-                          style={{ borderRadius: '25px', fontWeight: '500' }}
+                          className="btn btn-dark btn-lg portal-btn w-100"
                         >
                           <i className="fas fa-sign-in-alt me-2"></i>
                           Customer Login
@@ -124,45 +138,36 @@ const Home = () => {
                   </Col>
                   
                   <Col lg={5} xl={4}>
-                    <Card className="h-100 border-0 shadow-sm" style={{ borderRadius: '15px' }}>
-                      <Card.Body className="p-3 text-center">
-                        <div className="mb-3">
-                          <div 
-                            className="mx-auto d-flex align-items-center justify-content-center"
-                            style={{
-                              width: '70px',
-                              height: '70px',
-                              borderRadius: '50%',
-                              background: 'linear-gradient(45deg, #28a745, #1e7e34)',
-                              color: 'white',
-                              fontSize: '1.8rem'
-                            }}
-                          >
-                            <i className="fas fa-briefcase"></i>
-                          </div>
+                    <Card className="portal-card banker-card h-100">
+                      <Card.Body className="p-4 text-center">
+                        <div className="portal-icon banker-icon">
+                          <i className="fas fa-briefcase"></i>
                         </div>
-                        <h5 className="mb-2 text-success">Banker Portal</h5>
-                        <p className="text-muted mb-3 small" style={{ lineHeight: '1.5' }}>
-                          Manage customer accounts and oversee banking operations
+                        <h4 className="mb-3 text-dark fw-bold">Banker Portal</h4>
+                        <p className="text-muted mb-4">
+                          Manage customer accounts and oversee banking operations with powerful tools
                         </p>
-                        <div className="mb-3">
-                          <small className="text-muted d-block mb-1">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Customer management
-                          </small>
-                          <small className="text-muted d-block mb-1">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Analytics dashboard
-                          </small>
-                          <small className="text-muted d-block">
-                            <i className="fas fa-check text-success me-1"></i>
-                            Transaction oversight
-                          </small>
+                        <div className="features-list mb-4">
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Customer management</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Analytics dashboard</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Transaction oversight</span>
+                          </div>
+                          <div className="feature-point">
+                            <i className="fas fa-check-circle text-success"></i>
+                            <span>Advanced reporting</span>
+                          </div>
                         </div>
                         <Link 
                           to="/login/banker" 
-                          className="btn btn-success w-100 py-2"
-                          style={{ borderRadius: '25px', fontWeight: '500' }}
+                          className="btn btn-dark btn-lg portal-btn w-100"
                         >
                           <i className="fas fa-sign-in-alt me-2"></i>
                           Banker Login
@@ -173,18 +178,28 @@ const Home = () => {
                 </Row>
                 
                 {/* Security Notice */}
-                <div className="mt-4 pt-3 border-top text-center">
-                  <div className="d-flex justify-content-center align-items-center text-muted">
-                    <i className="fas fa-shield-alt me-2 text-success"></i>
-                    <span className="me-3">Bank-level encryption</span>
-                    <i className="fas fa-lock me-2 text-success"></i>
-                    <span className="me-3">SSL secured</span>
-                    <i className="fas fa-certificate me-2 text-success"></i>
-                    <span>FDIC insured</span>
+                <div className="security-section mt-5 pt-4">
+                  <div className="security-badges">
+                    <div className="security-badge">
+                      <i className="fas fa-shield-alt"></i>
+                      <span>Bank-level encryption</span>
+                    </div>
+                    <div className="security-badge">
+                      <i className="fas fa-lock"></i>
+                      <span>SSL secured</span>
+                    </div>
+                    <div className="security-badge">
+                      <i className="fas fa-certificate"></i>
+                      <span>FDIC insured</span>
+                    </div>
+                    <div className="security-badge">
+                      <i className="fas fa-user-shield"></i>
+                      <span>Privacy protected</span>
+                    </div>
                   </div>
-                  <small className="text-muted mt-2 d-block">
-                    Your security and privacy are our top priorities. All transactions are encrypted and monitored 24/7.
-                  </small>
+                  <p className="security-text text-center mt-3">
+                    Your security and privacy are our top priorities. All transactions are encrypted and monitored 24/7 by our advanced security systems.
+                  </p>
                 </div>
               </Card.Body>
             </Card>
@@ -194,9 +209,15 @@ const Home = () => {
         {/* Footer */}
         <Row className="mt-5">
           <Col xs={12}>
-            <div className="text-center text-white">
-              <small style={{ opacity: 0.8 }}>
-                © 2024 Modern Banking System. All rights reserved.
+            <div className="text-center text-dark footer-content">
+              <div className="footer-links mb-3">
+                <a href="#privacy" className="footer-link">Privacy Policy</a>
+                <a href="#terms" className="footer-link">Terms of Service</a>
+                <a href="#contact" className="footer-link">Contact Us</a>
+                <a href="#support" className="footer-link">Support</a>
+              </div>
+              <small className="footer-copyright">
+                © 2024 Modern Banking System. All rights reserved. | Built with ❤️ for secure banking
               </small>
             </div>
           </Col>

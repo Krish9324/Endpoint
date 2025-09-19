@@ -67,7 +67,7 @@ const LoginBanker = () => {
             <Card className="login-card">
               <Card.Body>
                 <div className="text-center mb-4">
-                  <i className="fas fa-briefcase fa-3x text-success mb-3"></i>
+                  <i className="fas fa-briefcase fa-3x text-dark mb-3"></i>
                   <h2>Banker Login</h2>
                   <p className="text-muted">Access banking administration</p>
                 </div>
@@ -114,7 +114,7 @@ const LoginBanker = () => {
 
                   <Button
                     type="submit"
-                    className="btn btn-success w-100 mb-3"
+                    className="btn-banking w-100 mb-3"
                     disabled={loading}
                   >
                     {loading ? (
@@ -135,14 +135,22 @@ const LoginBanker = () => {
                   <p className="mb-2">
                     <small className="text-muted">
                       Customer? 
-                      <Link to="/login/customer" className="ms-1">
+                      <Link to="/login/customer" className="ms-1" style={{color: '#007bff'}}>
                         Login as Customer
+                      </Link>
+                    </small>
+                  </p>
+                  <p className="mb-2">
+                    <small className="text-muted">
+                      Don't have an account? 
+                      <Link to="/signup" className="ms-1" style={{color: '#007bff'}}>
+                        Create Account
                       </Link>
                     </small>
                   </p>
                   <p>
                     <small className="text-muted">
-                      <Link to="/" className="text-decoration-none">
+                      <Link to="/" className="text-decoration-none" style={{color: '#007bff'}}>
                         <i className="fas fa-arrow-left me-1"></i>
                         Back to Home
                       </Link>
