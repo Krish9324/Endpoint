@@ -18,8 +18,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? [
-        'https://your-frontend-domain.vercel.app',
-        'https://your-frontend-domain.netlify.app',
+        process.env.FRONTEND_URL || 'https://your-frontend-domain.vercel.app',
         'http://localhost:3000'
       ] 
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
