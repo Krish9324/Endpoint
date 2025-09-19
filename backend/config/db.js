@@ -1,42 +1,34 @@
 const mysql = require('mysql2');
 require('dotenv').config();
 
-// Base configuration
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_USER = process.env.DB_USER || 'root';
-const DB_PASSWORD = process.env.DB_PASSWORD || '';
-const DB_NAME = process.env.DB_NAME || 'Bank';
+// Aiven MySQL Configuration
+const DB_HOST = process.env.DB_HOST ;
+const DB_PORT = process.env.DB_PORT ;
+const DB_USER = process.env.DB_USER ;
+const DB_PASSWORD = process.env.DB_PASSWORD ;
+const DB_NAME = process.env.DB_NAME;
+const DB_SSL = process.env.DB_SSL === 'true';
 
-// Ensure database exists before creating the pool
-const ensureDatabaseExists = async () => {
-  try {
-    const connection = mysql.createConnection({
-      host: DB_HOST,
-      user: DB_USER,
-      password: DB_PASSWORD
-    });
-
-    const promiseConnection = connection.promise();
-    await promiseConnection.execute(
-      `CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
-    );
-    await promiseConnection.end();
-    console.log(`✅ Database ensured: ${DB_NAME}`);
-  } catch (error) {
-    console.error('❌ Failed to ensure database exists:', error.message);
-    throw error;
+// SSL Configuration for Aiven
+const sslConfig = DB_SSL ? {
+  ssl: {
+    rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED === 'false' ? false : true
   }
-};
+} : {};
 
-// Create connection pool (after DB exists)
+// Create connection pool for Aiven MySQL
 const pool = mysql.createPool({
   host: DB_HOST,
+  port: DB_PORT,
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
   waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
+  queueLimit: 0,
+  acquireTimeout: parseInt(process.env.DB_ACQUIRE_TIMEOUT) || 60000,
+  timeout: parseInt(process.env.DB_TIMEOUT) || 60000,
+  ...sslConfig
 });
 
 // Get promise-based pool
@@ -46,10 +38,12 @@ const promisePool = pool.promise();
 const testConnection = async () => {
   try {
     const connection = await promisePool.getConnection();
-    console.log('✅ MySQL Connected Successfully');
+    console.log('✅ Aiven MySQL Connected Successfully');
+    console.log(`📊 Connected to: ${DB_HOST}:${DB_PORT}/${DB_NAME}`);
     connection.release();
   } catch (error) {
-    console.error('❌ MySQL Connection Failed:', error.message);
+    console.error('❌ Aiven MySQL Connection Failed:', error.message);
+    console.error('🔧 Check your .env file configuration');
     process.exit(1);
   }
 };
@@ -92,7 +86,6 @@ const initializeDatabase = async () => {
 
 module.exports = {
   pool: promisePool,
-  ensureDatabaseExists,
   testConnection,
   initializeDatabase
 };
