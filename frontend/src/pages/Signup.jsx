@@ -142,8 +142,9 @@ const Signup = () => {
                     <div className="role-buttons">
                       <Button
                         type="button"
-                        className={`role-btn ${role === 'customer' ? 'active' : ''}`}
+                        className={`role-btn ${role === 'customer' ? 'active customer-active' : ''}`}
                         onClick={() => setRole('customer')}
+                        variant={role === 'customer' ? 'dark' : 'outline-dark'}
                       >
                         <div className="role-icon">
                           <i className="fas fa-user"></i>
@@ -152,11 +153,17 @@ const Signup = () => {
                           <h6>Customer</h6>
                           <small>Personal banking services</small>
                         </div>
+                        {role === 'customer' && (
+                          <div className="role-check">
+                            <i className="fas fa-check-circle"></i>
+                          </div>
+                        )}
                       </Button>
                       <Button
                         type="button"
-                        className={`role-btn ${role === 'banker' ? 'active' : ''}`}
+                        className={`role-btn ${role === 'banker' ? 'active banker-active' : ''}`}
                         onClick={() => setRole('banker')}
+                        variant={role === 'banker' ? 'dark' : 'outline-dark'}
                       >
                         <div className="role-icon">
                           <i className="fas fa-briefcase"></i>
@@ -165,6 +172,11 @@ const Signup = () => {
                           <h6>Banker</h6>
                           <small>Banking administration</small>
                         </div>
+                        {role === 'banker' && (
+                          <div className="role-check">
+                            <i className="fas fa-check-circle"></i>
+                          </div>
+                        )}
                       </Button>
                     </div>
                   </div>

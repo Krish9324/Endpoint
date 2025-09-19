@@ -472,6 +472,186 @@ code {
   overflow: hidden;
 }
 
+/* New Landing Page Styles */
+.feature-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.feature-card .feature-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: white;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.feature-card h5 {
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.feature-card p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.feature-list li i {
+  color: #007bff;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.service-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.service-card .service-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #000000, #333333);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: white;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.service-card h6 {
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.service-card p {
+  color: #6c757d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  height: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.testimonial-content {
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-content .stars {
+  color: #ffc107;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.testimonial-content p {
+  color: #6c757d;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.author-info h6 {
+  color: #000000;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.author-info span {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
 .signup-card {
   background: #ffffff;
   border: 1px solid #e9ecef;
@@ -560,6 +740,33 @@ code {
   background: #000000;
   color: white;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.role-btn.customer-active {
+  background: #007bff !important;
+  border-color: #007bff !important;
+  color: white !important;
+}
+
+.role-btn.banker-active {
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: white !important;
+}
+
+.role-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #28a745;
+  font-size: 1.2rem;
+  animation: checkBounce 0.5s ease;
+}
+
+@keyframes checkBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .role-icon {
