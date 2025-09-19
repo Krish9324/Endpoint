@@ -18,11 +18,15 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? [
-        process.env.FRONTEND_URL || 'https://mybankingwebsitekrishmenath.vercel.app/',
+        process.env.FRONTEND_URL || 'https://mybankingwebsitekrishmenath.vercel.app',
+        'https://mybankingwebsitekrishmenath.vercel.app',
         'http://localhost:3000'
       ] 
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json({ limit: '10mb' }));
